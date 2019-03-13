@@ -1,0 +1,410 @@
+............Definations............Table creation...........
+...................................................................................................................................................
+...................................................................................................................................................
+
+
+create user Global_Bank identified by Jecian;
+grant dba to Global_Bank;
+create table Banks (Bank_Id int,Bank_Name varchar2(30),Found_Date date ,Founder_Name varchar(30));
+create table Branch_Details (IFSC_Code varchar2(20),Address_Id varchar2(20),Bank_Id int,Branch_Type_Code varchar2(20));
+create table Address_Details(Address_Id varchar2(20),Street varchar2(20),Area varchar2(20),City varchar2(20),Pincode number ,State varchar(20),Country varchar2(20));
+Create table Customer (Customer_Id varchar2(20) ,Account_No int ,Address varchar2(20),IFSC_Code varchar2(20),Fname varchar2(20),Mname varchar2(20),Lname varchar2(20),Guardian_Name varchar2(30),Email_Id varchar2(30),Phone_No number(11),Dob Date,Gender varchar2(5),Nationality varchar2(20),Nominee_Id varchar(20));
+create table Branch_Type(Branch_Type_Code varchar2(20),Branch_Type_Desc varchar2(20));
+create table Employee(Employee_Id varchar2(20),E_Name varchar2(20),Account_No int,IFSC_Code varchar2(20),Salary Number(15,2),Commission number(10,2),Email_Id varchar2(30),Phone_No number(11),Gender varchar2(5),Dob Date,Hire_Date Date,Job varchar2(20));
+create table Account_Details(Account_No int,Account_Status_Code Number(5),Account_Type_Code number(5),Current_Balance number(38,2));
+create table Account_Status(Account_Status_Code number(5),Account_Status_Desc varchar2(20));
+create table Account_Type(Account_Type_Code number(5),Account_Type_Desc varchar2(20));
+create table Transaction (Transaction_Id number,Account_No int,Merchant_Id int,Transaction_Type_Code number(5),Transaction_Date_Time timestamp ,Amount number(38,2) );
+create table Transaction_type(Transaction_Type_Code number(5),Transaction_Type_Desc varchar2(20));
+create table Nominee_Details (Nominee_Id varchar2(20),F_Name varchar2(20),L_Name varchar2(20),Relation varchar2(20),Phone_No number(11),Dob Date);
+
+SQL> select * from Tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+ACCOUNT_DETAILS                TABLE
+ACCOUNT_STATUS                 TABLE
+ACCOUNT_TYPE                   TABLE
+ADDRESS_DETAILS                TABLE
+BANKS                          TABLE
+BRANCHE_DETAILS                TABLE
+BRANCH_TYPE                    TABLE
+CUSTOMER                       TABLE
+EMPLOYEE                       TABLE
+NOMINEE_DETAILS                TABLE
+TRANSACTION                    TABLE
+TRANSACTION_TYPE               TABLE
+
+12 rows selected.
+
+..........................CONSTRAINTS : Primary Key,Check,Not Null,Default..................................................
+...................................................................................................................................................
+...................................................................................................................................................
+
+
+Alter table Banks add constraints Banks_Pk primary key(Bank_Id);
+
+Alter table Address_Details add constraints Addressd_Pk primary key(Address_Id);
+
+Alter table Branch_Details add constraints Branchd_Pk primary key(IFSC_Code);
+
+alter table Customer add constraints Customerid_Pk primary key(Customer_Id);
+alter table Customer modify Fname constraint C_Fname_NN Not Null;
+alter table customer modify Email_Id constraint C_Email_NN not null;
+alter table Customer modify Phone_No constraint C_Phone_NN not null;
+alter table Customer modify Dob constraint C_Dob_NN not null;
+alter table Customer add constraints C_Email_Chk check(Email_Id like '%@%');
+alter table Customer add constraints C_Phone_Chk check(length(Phone_No)<=11);
+
+select Table_Name ,Constraint_Name,Constraint_Type from User_Constraints
+where Table_Name='CUSTOMER';
+
+TABLE_NAME                     CONSTRAINT_NAME                C
+------------------------------ ------------------------------ -
+CUSTOMER                       CUSTOMERID_PK                  P
+CUSTOMER                       C_FNAME_NN                     C
+CUSTOMER                       C_EMAIL_NN                     C
+CUSTOMER                       C_PHONE_NN                     C
+CUSTOMER                       C_DOB_NN                       C
+CUSTOMER                       C_EMAIL_CHK                    C
+CUSTOMER                       C_PHONE_CHK                    C
+
+7 rows selected.
+
+
+alter table Branch_Type add constraints Bt_Btc_Pk primary key(Branch_Type_Code);
+
+
+alter table Employee add constraints E_Eid_Pk primary key(Employee_Id);
+alter table Employee modify E_Name constraint E_En_NN not null;
+alter table Employee modify Email_Id constraint E_Email_NN not null;
+alter table Employee modify Salary constraint E_Sal_NN not null;
+alter table Employee modify Phone_No constraint E_Phone_NN not null;
+alter table Employee modify Dob constraint E_Dob_NN not null;
+alter table Employee modify Hire_Date constraint E_HD_NN not null;
+alter table Employee modify Job constraint E_Job_NN not null;
+alter table Employee add constraints E_Email_Chk Check(Email_Id like '%@%');
+alter table Employee add constraints E_Phone_Chk Check(length(Phone_No)<=11);
+
+select Table_Name ,Constraint_Name from User_cons_columns
+where Table_Name='EMPLOYEE';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+EMPLOYEE                       E_EID_PK
+EMPLOYEE                       E_EN_NN
+EMPLOYEE                       E_EMAIL_NN
+EMPLOYEE                       E_SAL_NN
+EMPLOYEE                       E_PHONE_NN
+EMPLOYEE                       E_DOB_NN
+EMPLOYEE                       E_HD_NN
+EMPLOYEE                       E_JOB_NN
+EMPLOYEE                       E_EMAIL_CHK
+EMPLOYEE                       E_PHONE_CHK
+
+10 rows selected.
+
+alter table Nominee_Details add constraints N_Nid_Pk primary key(Nominee_Id);
+alter table Nominee_Details drop constraint N_Phoe_Chk;
+alter table Nominee_Details add constraints N_P_Chk check(length(Phone_No)<=11);
+alter table Nominee_Details modify F_Name constraint N_Fname_NN not Null;
+alter table Nominee_Details modify Phone_No constraint N_Phone_NN not Null;
+alter table Nominee_Details modify Dob constraint N_Dob_NN not Null;
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='NOMINEE_DETAILS';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+NOMINEE_DETAILS                N_NID_PK
+NOMINEE_DETAILS                N_FNAME_NN
+NOMINEE_DETAILS                N_P_CHK
+NOMINEE_DETAILS                N_PHONE_NN
+NOMINEE_DETAILS                N_DOB_NN
+
+
+alter table Account_Details add constraints AD_Accno_Pk primary key(Account_No);
+alter table Account_Details Modify Current_Balance default 0.00;
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='ACCOUNT_DETAILS';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+ACCOUNT_DETAILS                AD_ACCNO_PK
+
+
+
+alter table Account_Status add constraints As_Asc_Pk primary key(Account_Status_Code);
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='ACCOUNT_STATUS';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+ACCOUNT_STATUS                 AS_ASC_PK
+
+alter table Account_Type add constraints At_Atc_Pk primary key(Account_Type_Code);
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='ACCOUNT_TYPE';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+ACCOUNT_TYPE                   AT_ATC_PK
+
+
+alter table transaction add constraints T_Tid_Pk primary key(Transaction_Id);
+alter table Transaction modify Transaction_Date_Time constraint T_Tdt_NN Not Null;
+alter table Transaction modify Amount constraint T_Amt_NN Not Null;
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='TRANSACTION';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+TRANSACTION                    T_TID_PK
+TRANSACTION                    T_TDT_NN
+TRANSACTION                    T_AMT_NN
+
+
+alter table Transaction_Type add constraints Tt_Ttc_Pk primary key(Transaction_Type_Code);
+
+select Table_Name,Constraint_Name from user_cons_columns
+where Table_Name='TRANSACTION_TYPE';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+TRANSACTION_TYPE               TT_TTC_PK
+
+
+............................................CONSTRAINT :  Foreign Key.....................................................................................
+...................................................................................................................................................
+...................................................................................................................................................
+
+alter table Branch_Details add constraints Bd_Aid_Fk Foreign key(Address_Id) references Address_Details(Address_Id) on delete cascade;
+alter table Branch_Details add constraints Bd_Bid_Fk Foreign key(Bank_Id) references Banks(Bank_Id) on delete cascade;
+alter table Branch_Details add constraints Bd_Btc_Fk Foreign key(Branch_type_code) references Branch_type(Branch_type_code) on delete cascade;
+
+select table_name,constraint_name from user_cons_columns
+where table_name='BRANCH_DETAILS';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+BRANCH_DETAILS                 BD_BID_FK
+BRANCH_DETAILS                 BD_AID_FK
+BRANCH_DETAILS                 BD_BTC_FK
+BRANCH_DETAILS                 BRANCHD_PK
+
+
+
+alter table Customer add constraints C_Aid_Fk foreign key(Address_Id) references Address_Details(Address_Id) on delete cascade;
+alter table Customer add constraints C_Accno_Fk foreign key(Account_No) references Account_Details(Account_no) on delete cascade;
+alter table Customer add constraints C_IFSC_Fk foreign key(IFSC_Code) references Branch_Details(IFSC_Code) on delete cascade;
+alter table Customer add constraints C_Nid_Fk foreign key(Nominee_Id) references Nominee_Details(Nominee_Id) on delete cascade;
+
+select table_name,constraint_name from user_cons_columns
+  2  where table_name='CUSTOMER';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+CUSTOMER                       C_IFSC_FK
+CUSTOMER                       C_AID_FK
+CUSTOMER                       C_NID_FK
+CUSTOMER                       C_ACCNO_FK
+CUSTOMER                       CUSTOMERID_PK
+CUSTOMER                       C_FNAME_NN
+CUSTOMER                       C_EMAIL_NN
+CUSTOMER                       C_PHONE_NN
+CUSTOMER                       C_DOB_NN
+CUSTOMER                       C_EMAIL_CHK
+CUSTOMER                       C_PHONE_CHK
+
+11 rows selected.
+
+
+
+
+
+alter table Employee add constraints E_accno_Fk foreign key(Account_No) references Account_Details(Account_No) on delete cascade;
+alter table Employee add constraints E_IFSC_Fk foreign key(IFSC_Code) references Branch_Details(IFSC_Code) on delete cascade;
+
+select table_name,constraint_name from user_cons_columns
+where table_name='EMPLOYEE';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+EMPLOYEE                       E_ACCNO_FK
+EMPLOYEE                       E_IFSC_FK
+EMPLOYEE                       E_EID_PK
+EMPLOYEE                       E_EN_NN
+EMPLOYEE                       E_EMAIL_NN
+EMPLOYEE                       E_SAL_NN
+EMPLOYEE                       E_PHONE_NN
+EMPLOYEE                       E_DOB_NN
+EMPLOYEE                       E_HD_NN
+EMPLOYEE                       E_JOB_NN
+EMPLOYEE                       E_EMAIL_CHK
+EMPLOYEE                       E_PHONE_CHK
+
+12 rows selected.
+
+
+alter table Account_Details add constraints Ad_Asc_Fk foreign key(Account_Status_Code) references Account_Status(Account_Status_Code) on delete cascade;
+alter table Account_Details add constraints Ad_Atc_Fk foreign key(Account_Type_Code) references Account_Type(Account_Type_Code) on delete cascade;
+
+select table_name,constraint_name from user_cons_columns
+where table_name='ACCOUNT_DETAILS';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+ACCOUNT_DETAILS                AD_ASC_FK
+ACCOUNT_DETAILS                AD_ATC_FK
+ACCOUNT_DETAILS                AD_ACCNO_PK
+
+
+
+alter table Transaction add constraints T_accno_Fk foreign key(Account_No) references Account_Details(Account_No) on delete cascade;
+alter table Transaction add constraints T_Ttc_Fk foreign key(Transaction_Type_Code) references Transaction_Type(Transaction_Type_Code) on delete cascade;
+
+select table_name,constraint_name from user_cons_columns
+where table_name='TRANSACTION';
+
+TABLE_NAME                     CONSTRAINT_NAME
+------------------------------ ------------------------------
+TRANSACTION                    T_ACCNO_FK
+TRANSACTION                    T_TTC_FK
+TRANSACTION                    T_TID_PK
+TRANSACTION                    T_TDT_NN
+TRANSACTION                    T_AMT_NN
+
+
+
+------------INSERTION-------------------------------------
+-----------Banks-------------------
+
+ insert into banks values (654321,'Global_Bank','11-AUG-18','GSLR');
+
+
+-----Branch Type----------
+ insert into branch_type values('GB701','Main');
+insert into branch_type values('GB702','Urban Main');
+ insert into branch_type values('GB703','Urban Sub');
+ insert into branch_type values('GB704','Rural');
+
+BRANCH_TYPE_CODE     BRANCH_TYPE_DESC
+-------------------- --------------------
+GB701                Main
+GB702                Urban Main
+GB703                Urban Sub
+GB704                Rural
+
+
+---------Address_Details--------
+ insert into address_details values('&Addressid','&Street','&Area','&City',&Pincode,'&state','&country');
+
+
+ADDRESS_ID           STREET               AREA                 CITY                    PINCODE STATE        COUNTRY
+-------------------- -------------------- -------------------- -------------------- ---------- -------------------- --------------------
+GBBDMP001            Street A             Area A               City A                   111111 State A              Country A
+GBBDMP002            Street B             Area B               City B                   222222 State B              Country B
+GBBDMP003            Street C             Area C               City C                   333333 State C              Country C
+GBBDMP004            Street D             Area D               City D                   444444 State D              COuntry D
+GBBDMP005            Street E             Area E               City E                   555555 State E              Country E
+GBCCMP001            Street A             Area A               City A                   111111 State A              Country A
+GBCCMP002            Street B             Area B               City B                   222222 State B              Country B
+GBCCMP003            Street C             Area C               City C                   333333 State C              Country C
+GBCCMP004            Street D             Area D               City D                   444444 State D              Country D
+GBCCMP005            Street E             Area E               City E                   555555 State E              Country E
+
+
+---------------Branch_Details--------------------------
+
+ insert into branch_details values('&IFSCCODE','&AddressId',&BankId,'&Br_Ty_code');
+
+
+IFSC_CODE            ADDRESS_ID              BANK_ID BRANCH_TYPE_CODE
+-------------------- -------------------- ---------- --------------------
+GBIFSC001            GBBDMP001                654321 GB701
+GBIFSC002            GBBDMP002                654321 GB702
+GBIFSC003            GBBDMP003                654321 GB703
+GBIFSC004            GBBDMP004                654321 GB703
+GBIFSC005            GBBDMP005                654321 GB704
+
+---------------Account_Status--------------------------
+
+ insert into account_status Values(101,'Active');
+
+ insert into account_status Values(102,'Closed');
+
+ACCOUNT_STATUS_CODE ACCOUNT_STATUS_DESC
+------------------- --------------------
+                101 Active
+                102 Closed
+
+------------Account_type------------------------
+
+
+ insert into account_type Values(111,'Savings');
+
+ insert into account_type Values(112,'Current')
+
+ insert into account_type Values(113,'Joint');
+
+
+
+ACCOUNT_TYPE_CODE ACCOUNT_TYPE_DESC
+----------------- --------------------
+              111 Savings
+              112 Current
+              113 Joint
+
+---------	Transaction_type----------------
+
+
+
+SQL> insert into transaction_type Values(121,'Withdrawl');
+
+SQL> insert into transaction_type Values(122,'Deposit');
+
+SQL> insert into transaction_type Values(123,'Transfer');
+
+
+TRANSACTION_TYPE_CODE TRANSACTION_DESC
+--------------------- --------------------
+                  121 Withdrawl
+                  122 Deposit
+                  123 Transfer
+
+
+-------sequence for account---------
+
+create sequence accno_seq1
+  2  start with 1000000000
+  3  minvalue 1000000000
+  4  increment by 1
+  5  maxvalue 10000000000;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
