@@ -1,0 +1,1271 @@
+#DATABASE LANGUAGE LANGUAGE 
+====================================================================================================
+DAY1=================================@@@@@@@@@@@@@@@
+create user Global_Bank identified by jecian;
+desc all_users;
+select username from all_users ;
+SQL> grant dba to Global_Bank;
+SQL> create table banks(Bank_Id int,Bank_Name varchar(20),Found_Date date,Founder_name varchar(25));
+SQL> create table Branch_Details(IFSC_Code varchar(20),Address_Id varchar(20),Bank_Id int ,Branch_Type_Code varchar(20));
+SQL> create table Address_Details(Address_Id varchar(20),Street varchar(20),Area varchar(20),Town varchar(20),Pincode int,state  varchar(20),country varchar(20));
+SQL> create table Customer(Customer_Id varchar(20),Account_No int ,Address_Id varchar(20),IFSC_Code varchar(20),Fname varchar2(20),Mname varchar(20),Lname varchar(20),Guardian_Name varchar2(30),Email_Id varchar(20),Phone_no number(11),DOB date,Gender varchar(5),Nationality varchar(20),Nominee_Id varchar(20));
+SQL> create table Branch_Types (Branch_Type_Code varchar(20),Branch_Type_Desc varchar(20));
+SQL> create table Employee(Employee_Id varchar(20),Ename varchar(20),Account_no int , IFSC_Code varchar(20),Salary number(15,2),Commission  number(10,2),Email_Id varchar(30),Phone_No Number(11),Gender varchar(5),DOB date,Hiredate date,Job varchar(20));
+SQL> create table Account_Details(Account_No int,Account_status_Code number(5),Account_Type_Code number(5),Current_Balance number(38,2);
+SQL> create table Account_Status (Account_Status_Code number(5),Account_Status_Desc varchar(20));
+SQL> create table Account_Type (Account_Type_Code number(5),Account_Type_Desc varchar(20));
+SQL> Create table Transaction (Transaction_Id number(10),Account_No int,Merchant_Id int,Transaction_Type_Code number(5), Transaction_Date_Time timestamp, Transaction_Amount number(38,2));
+SQL> Create table Transaction_Types(Transaction_Type_Code number(5),Transaction_Type_Desc varchar(20));
+SQL> create table Nominee_Details (Nominee_Id varchar(20),Fname varchar(20),Lname varchar(20),Relation varchar(20),phone_No number(11),DOB date);
+
+
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+ACCOUNT_DETAILS                TABLE
+ACCOUNT_STATUS                 TABLE
+ACCOUNT_TYPE                   TABLE
+ADDRESS_DETAILS                TABLE
+BANKS                          TABLE
+BRANCH_DETAILS                 TABLE
+BRANCH_TYPES                   TABLE
+CUSTOMER                       TABLE
+EMPLOYEE                       TABLE
+NOMINEE_DETAILS                TABLE
+TRANSACTION                    TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+TRANSACTION_TYPES              TABLE
+
+12 rows selected.
+
+# misc command of sql
+set lines 100;
+set pagesize 100;
+clear screen ;
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@222222@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+===================================================================================================================================================
+day2====
+#integrity constraints == PK FK UNIQUE CHECK NOT NULL DEFAULT
+
+SQL> select constraint_name from user_cons_columns where TABLE_NAME='BANKS';
+SQL> desc Branch_details;
+SQL> alter table Branch_details  add constraints Branchd_Pk primary key(IFSC_Code);
+SQL> alter table address_details  add constraints Addressd_Pk primary key(Address_Id);
+SQL> alter table customer add constraints customerid_Pk primary key(customer_Id);
+
+SQL> alter table customer modify Fname constraint C_Fname_NN not null ;
+SQL> alter table customer modify email_id constraint C_email_NN not null ;
+
+SQL> alter table customer add constraints C_email_chk check(email_id like'%@%');
+
+Table altered.
+
+SQL> alter table customer add constraints C_phone_chk check(length(phone_no)<=11);
+
+Table altered.
+SQL> alter table customer modify Fname constraint C_Fname_NN not null ;
+
+Table altered.
+
+SQL> alter table customer modify email_id constraint C_email_NN not null ;
+
+Table altered.
+
+SQL> alter table customer modify phone_no constraint C_phone_NN not null;
+
+Table altered.
+
+SQL> alter table customer modify dob constraint C_dob_NN not null;
+
+Table altered.
+
+
+SQL>  select constraint_name,owner,column_name,table_name from user_cons_columns where TABLE_NAME='CUSTOMER';
+
+
+SQL> alter table branch_types add constraints Bt_Btc_Pk primary key(branch_type_code);
+
+Table altered.
+SQL> alter table employee add constraints E_Eid_Pk primary key(employee_Id);
+
+Table altered.
+
+SQL> alter table employee modify email_id constraint E_email not null;
+
+Table altered.
+SQL> alter table employee modify Ename constraint E_en_NN not null;
+
+Table altered.
+SQL> alter table employee modify Ename constraint E_en_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify salary constraint E_sal_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify salary constraint E_phone_NN not null;
+alter table employee modify salary constraint E_phone_NN not null
+                            *
+ERROR at line 1:
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+
+
+SQL> alter table employee modify phone_no constraint E_phone_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify dob constraint E_dob_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify hiredate constraint E_hiredate_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify job constraint E_job_NN not null;
+
+Table altered.
+
+SQL>SQL> alter table employee modify salary constraint E_sal_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify salary constraint E_phone_NN not null;
+alter table employee modify salary constraint E_phone_NN not null
+                            *
+ERROR at line 1:
+ORA-01442: column to be modified to NOT NULL is already NOT NULL
+
+
+SQL> alter table employee modify phone_no constraint E_phone_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify dob constraint E_dob_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify hiredate constraint E_hiredate_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify job constraint E_job_NN not null;
+
+Table altered.
+
+
+SQL> alter table employee modify Ename constraint E_en_NN not null;
+
+Table altered.
+
+SQL> alter table employee modify salary constraint E_sal_NN not null;
+
+Table altered.
+SQL> alter table employee add constraints E_email_chk check(email_id like '%@%');
+
+Table altered.
+
+SQL> alter table employee add constraints E_phone_chk check(length(phone_no)<=11 );
+
+Table altered.
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='employee';
+
+no rows selected
+
+
+@@@@@@@@@@@@@@@@@@@@@@@EMPLOYEE@@@@@@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='EMPLOYEE';
+
+CONSTRAINT_NAME
+------------------------------
+E_EID_PK
+E_EMAIL
+E_EN_NN
+E_SAL_NN
+E_PHONE_NN
+E_DOB_NN
+E_HIREDATE_NN
+E_JOB_NN
+E_EMAIL_CHK
+E_PHONE_CHK
+
+10 rows selected.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@CUSTOMER@@@@@@@@@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='CUSTOMER';
+
+CONSTRAINT_NAME
+------------------------------
+CUSTOMERID_PK
+C_FNAME_NN
+C_EMAIL_NN
+C_PHONE_NN
+C_DOB_NN
+C_EMAIL_CHK
+C_PHONE_CHK
+
+7 rows selected.
+
+
+@@@@@@@@@@@@@@@@@@BANKS@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='BANKS';
+
+CONSTRAINT_NAME
+------------------------------
+BANKS_PK
+
+
+
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NOMINEE_ID                                         VARCHAR2(20)
+ FNAME                                              VARCHAR2(20)
+ LNAME                                              VARCHAR2(20)
+ RELATION                                           VARCHAR2(20)
+ PHONE_NO                                           NUMBER(11)
+ DOB                                                DATE
+
+SQL> alter table nominee_details add constraints n_nid_Pk primary key(nominee_id);
+
+Table altered.
+
+SQL> alter table nominee_details add constraints n_phone_chk check(length(phone_no)<=11);
+
+Table altered.
+
+SQL> alter table nominee_details  modify fname  constraint n_fname_NN not null;
+
+Table altered.
+
+SQL> alter table nominee_details  modify dob  constraint n_dob_NN not null;
+
+Table altered.
+
+SQL> alter table nominee_details  modify phone_no  constraint n_phone_NN not null;
+
+Table altered.
+CONSTRAINT_NAME
+------------------------------
+N_NID_PK
+N_PHONE_CHK
+N_FNAME_NN
+N_DOB_NN
+N_PHONE_NN
+ ----------------------------------------- -------- ----------------------------
+ ACCOUNT_NO                                         NUMBER(38)
+ ACCOUNT_STATUS_CODE                                NUMBER(5)
+ ACCOUNT_TYPE_CODE                                  NUMBER(5)
+ CURRENT_BALANCE                                    NUMBER(38,2)
+
+SQL> alter table account_details add constraints Ad_accno_pk primary key(account_no);
+
+Table altered.
+
+SQL> alter table account_details  modify current_balance  constraint accd_currbal_NN not null;
+
+Table altered.
+SQL> alter table account_details  modify current_balance   default 000;
+
+Table altered.
+
+SQL> alter table account_details drop constraint  accd_currbal_nn;
+
+Table altered.
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='ACCOUNT_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+AD_ACCNO_PK
+SQL> alter table account_status add constraints As_asc_pk primary key(account_status_code);
+
+Table altered.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ACCOUNT_TYPE@@@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='ACCOUNT_TYPE';
+
+CONSTRAINT_NAME
+------------------------------
+AT_ATC_PK
+
+SQL> desc transaction ;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TRANSACTION_ID                                     NUMBER(10)
+ ACCOUNT_NO                                         NUMBER(38)
+ MERCHANT_ID                                        NUMBER(38)
+ TRANSACTION_TYPE_CODE                              NUMBER(5)
+ TRANSACTION_DATE_TIME                              TIMESTAMP(6)
+ TRANSACTION_AMOUNT                                 NUMBER(38,2)
+
+SQL> alter table transaction add constraints t_tid_Pk primary key(transaction_id);
+
+Table altered.
+
+SQL> alter table transaction  modify transaction_date_time constraint    t_tdt_nn not null ;
+
+Table altered.
+
+SQL> alter table transaction  modify transaction_amount constraint    t_tamt_nn not null ;
+
+Table altered.
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='TRANSACTION';
+
+CONSTRAINT_NAME
+------------------------------
+T_TID_PK
+T_TDT_NN
+T_TAMT_NN
+SQL> desc transaction_types;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TRANSACTION_TYPE_CODE                              NUMBER(5)
+ TRANSACTION_TYPE_DESC                              VARCHAR2(20)
+
+SQL> alter table transaction_types  add constraints tt_ttc_Pk primary key(transaction_type_code);
+
+Table altered.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@TRANSACTION_TYPES@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='TRANSACTION_TYPES';
+
+CONSTRAINT_NAME
+------------------------------
+TT_TTC_PK
+
+
+
+
+SQL> alter table branch_details add constraints Bd_aid_Fk foreign key (address_id) references  address_details (address_id) on delete cascade;
+
+Table altered.
+
+SQL> alter table branch_details add constraints Bd_bid_Fk foreign key (bank_id) references  banks (bank_id) on delete cascade;
+
+Table altered.
+
+SQL> alter table branch_types add constraints Bd_Btc_Fk foreign key (branch_type_code) references  branch_types (branch_type_code) on delete cascade;
+
+Table altered.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@BRANCHDETAILS@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='BRANCH_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+BRANCHD_PK
+BD_BID_FK
+BD_AID_FK
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='BRANCH_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+BRANCHD_PK
+BD_BID_FK
+BD_AID_FK
+
+SQL> alter table branch_types drop constraint Bd_Btc_Fk;
+
+Table altered.
+
+SQL> alter table branch_details add constraints Bd_Btc_Fk foreign key (branch_type_code) references  branch_types (branch_type_code) on delete cascade;
+
+Table altered.
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='BRANCH_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+BRANCHD_PK
+BD_BID_FK
+BD_AID_FK
+BD_BTC_FK
+SQL> alter table customer add constraints C_ifsc_Fk foreign key (IFSC_code) references  branch_details (IFSC_code) on delete cascade;
+
+Table altered.
+SQL> alter table customer add constraints C_Aid_Fk foreign key (Address_id) references  address_details (address_id) on delete cascade;
+
+Table altered.
+
+SQL> alter table customer add constraints C_Accno_Fk foreign key (Account_no) references  account_details (account_no) on delete cascade;
+
+Table altered.
+
+
+@@@@@@@@@@@@@@@@@@@@@CUSTOMER@@@@@@@@@@@@@@@@@@@
+
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='CUSTOMER';
+
+CONSTRAINT_NAME
+------------------------------
+CUSTOMERID_PK
+C_FNAME_NN
+C_EMAIL_NN
+C_PHONE_NN
+C_DOB_NN
+C_EMAIL_CHK
+C_PHONE_CHK
+C_AID_FK
+C_ACCNO_FK
+C_IFSC_FK
+
+10 rows selected.
+
+SQL> alter table customer add constraints C_nid_Fk foreign key (nominee_id) references  nominee_details (nominee_id) on delete cascade;
+
+Table altered.
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='CUSTOMER';
+
+CONSTRAINT_NAME
+------------------------------
+CUSTOMERID_PK
+C_FNAME_NN
+C_EMAIL_NN
+C_PHONE_NN
+C_DOB_NN
+C_EMAIL_CHK
+C_PHONE_CHK
+C_AID_FK
+C_ACCNO_FK
+C_IFSC_FK
+C_NID_FK
+
+11 rows selected.
+SQL> desc employee;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPLOYEE_ID                               NOT NULL VARCHAR2(20)
+ ENAME                                     NOT NULL VARCHAR2(20)
+ ACCOUNT_NO                                         NUMBER(38)
+ IFSC_CODE                                          VARCHAR2(20)
+ SALARY                                    NOT NULL NUMBER(15,2)
+ COMMISSION                                         NUMBER(10,2)
+ EMAIL_ID                                  NOT NULL VARCHAR2(30)
+ PHONE_NO                                  NOT NULL NUMBER(11)
+ GENDER                                             VARCHAR2(5)
+ DOB                                       NOT NULL DATE
+ HIREDATE                                  NOT NULL DATE
+ JOB                                       NOT NULL VARCHAR2(20)
+
+SQL> alter table employee add constraints E_accno_Fk foreign key (account_no) references  account_details (account_no) on delete cascade;
+
+Table altered.
+
+SQL> alter table employee add constraints E_IFSC_Fk foreign key (ifsc_code) references  branch_details (IFSC_code) on delete cascade;
+
+Table altered.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@EMPLOYEE@@@@@@@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='EMPLOYEE';
+
+CONSTRAINT_NAME
+------------------------------
+E_EID_PK
+E_EMAIL
+E_EN_NN
+E_SAL_NN
+E_PHONE_NN
+E_DOB_NN
+E_HIREDATE_NN
+E_JOB_NN
+E_EMAIL_CHK
+E_PHONE_CHK
+E_ACCNO_FK
+
+CONSTRAINT_NAME
+------------------------------
+E_IFSC_FK
+
+12 rows selected.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@ACCOUNT_DETAILS@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='ACCOUNT_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+AD_ACCNO_PK
+AD_ASC_FK
+AD_ATC_FK
+SQL> alter table account_details add constraints Ad_Atc_Fk foreign key (account_type_code) references  account_type (account_type_code) on delete cascade;
+
+Table altered.
+SQL> alter table account_details add constraints Ad_Asc_Fk foreign key (account_status_code) references  account_status (account_status_code) on delete cascade;
+
+Table altered.
+SQL> alter table transaction add constraints T_Accno_Fk foreign key (account_no) references  account_details (account_no) on delete cascade;
+
+Table altered.
+
+SQL> alter table transaction add constraints T_ttc_Fk foreign key (transaction_type_code) references  transaction_type (transaction_type_code) on delete cascade;
+alter table transaction add constraints T_ttc_Fk foreign key (transaction_type_code) references  transaction_type (transaction_type_code) on delete cascade
+                                                                                                 *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> alter table transaction add constraints T_ttc_Fk foreign key (transaction_type_code) references  transaction_types (transaction_type_code) on delete cascade;
+
+Table altered.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@TRANSACTION@@@@@@@@@@@@@@@@@
+
+
+SQL>  select constraint_name from user_cons_columns where TABLE_NAME='TRANSACTION';
+
+CONSTRAINT_NAME
+------------------------------
+T_ACCNO_FK
+T_TTC_FK
+T_TID_PK
+T_TDT_NN
+T_TAMT_NN
+
+
+
+------------INSERTION-------------------------------------
+-----------Banks-------------------
+
+ insert into banks values (654321,'Global_Bank','11-AUG-18','GSLR');
+
+
+-----Branch Type----------
+ insert into branch_type values('GB701','Main');
+insert into branch_type values('GB702','Urban Main');
+ insert into branch_type values('GB703','Urban Sub');
+ insert into branch_type values('GB704','Rural');
+
+BRANCH_TYPE_CODE     BRANCH_TYPE_DESC
+-------------------- --------------------
+GB701                Main
+GB702                Urban Main
+GB703                Urban Sub
+GB704                Rural
+
+
+---------Address_Details--------
+ insert into address_details values('&Addressid','&Street','&Area','&City',&Pincode,'&state','&country');
+
+
+ADDRESS_ID           STREET               AREA                 CITY                    PINCODE STATE        COUNTRY
+-------------------- -------------------- -------------------- -------------------- ---------- -------------------- --------------------
+GBBDMP001            Street A             Area A               City A                   111111 State A              Country A
+GBBDMP002            Street B             Area B               City B                   222222 State B              Country B
+GBBDMP003            Street C             Area C               City C                   333333 State C              Country C
+GBBDMP004            Street D             Area D               City D                   444444 State D              COuntry D
+GBBDMP005            Street E             Area E               City E                   555555 State E              Country E
+GBCCMP001            Street A             Area A               City A                   111111 State A              Country A
+GBCCMP002            Street B             Area B               City B                   222222 State B              Country B
+GBCCMP003            Street C             Area C               City C                   333333 State C              Country C
+GBCCMP004            Street D             Area D               City D                   444444 State D              Country D
+GBCCMP005            Street E             Area E               City E                   555555 State E              Country E
+
+
+---------------Branch_Details--------------------------
+
+ insert into branch_details values('&IFSCCODE','&AddressId',&BankId,'&Br_Ty_code');
+
+
+IFSC_CODE            ADDRESS_ID              BANK_ID BRANCH_TYPE_CODE
+-------------------- -------------------- ---------- --------------------
+GBIFSC001            GBBDMP001                654321 GB701
+GBIFSC002            GBBDMP002                654321 GB702
+GBIFSC003            GBBDMP003                654321 GB703
+GBIFSC004            GBBDMP004                654321 GB703
+GBIFSC005            GBBDMP005                654321 GB704
+
+---------------Account_Status--------------------------
+
+ insert into account_status Values(101,'Active');
+
+ insert into account_status Values(102,'Closed');
+
+ACCOUNT_STATUS_CODE ACCOUNT_STATUS_DESC
+------------------- --------------------
+                101 Active
+                102 Closed
+
+------------Account_type------------------------
+
+
+ insert into account_type Values(111,'Savings');
+
+ insert into account_type Values(112,'Current')
+
+ insert into account_type Values(113,'Joint');
+
+
+
+ACCOUNT_TYPE_CODE ACCOUNT_TYPE_DESC
+----------------- --------------------
+              111 Savings
+              112 Current
+              113 Joint
+
+---------	Transaction_type----------------
+
+
+
+SQL> insert into transaction_type Values(121,'Withdrawl');
+
+SQL> insert into transaction_type Values(122,'Deposit');
+
+SQL> insert into transaction_type Values(123,'Transfer');
+
+
+TRANSACTION_TYPE_CODE TRANSACTION_DESC
+--------------------- --------------------
+                  121 Withdrawl
+                  122 Deposit
+                  123 Transfer
+
+
+-------sequence for account---------
+
+create sequence accno_seq1
+  2  start with 1000000000
+  3  minvalue 1000000000
+  4  increment by 1
+  5  maxvalue 10000000000;
+
+SQL> create table Customer_Address_Details (Customer_Id varchar(20),Street varchar(20),Area varchar(20),City varchar(20),Pincode number,State varchar(20),Country varchar(20));
+
+Table created.
+
+
+SQL> select constraint_name  from user_cons_columns where table_name ='CUSTOMER_ADDRESS_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+CAD_CID_FK
+SQL> alter table Customer_Address_Details add constraints Cad_Cid_FK foreign key(Customer_Id) references Customer(Customer_Id);
+
+Table altered.
+
+SQL> rename address_details to Branch_address_details;
+
+Table renamed.
+SQL> alter table customer drop column nominee_Id;
+SQL> alter table customer drop column account_no;
+
+Table altered.
+SQL> alter table Nominee_details drop column nominee_id;
+
+Table altered.
+SQL> alter table Nominee_details drop column nominee_id;
+
+Table altered.
+
+SQL> alter table nominee_details add customer_Id varchar(20);
+
+Table altered.
+
+SQL> desc nominee_details;
+ Name                                                                                Null?    Type
+ ----------------------------------------------------------------------------------- -------- --------------------------------------------------------
+ FNAME                                                                               NOT NULL VARCHAR2(20)
+ LNAME                                                                                        VARCHAR2(20)
+ RELATION                                                                                     VARCHAR2(20)
+ PHONE_NO                                                                            NOT NULL NUMBER(11)
+ DOB                                                                                 NOT NULL DATE
+ CUSTOMER_ID                                                                                  VARCHAR2(20)
+
+SQL> alter table nominee_details add constraints Nd_Cid_Fk foreign key(customer_Id) references customer(customer_id);
+
+Table altered.
+SQL> alter table nominee_details add constraints Nd_Cid_Fk foreign key(customer_Id) references customer(customer_id);
+
+Table altered.
+
+SQL> alter table account_details add customer_id varchar(20);
+
+Table altered.
+
+SQL> alter table account_details add constraints Ad_Cid_Fk foreign key(customer_id) references customer(customer_id);
+
+Table altered.
+
+SQL> alter table nominee_details add constraints Nd_Cid_Fk foreign key(customer_Id) references customer(customer_id);
+
+Table altered.
+
+SQL> alter table account_details add customer_id varchar(20);
+
+Table altered.
+
+SQL> alter table account_details add constraints Ad_Cid_Fk foreign key(customer_id) references customer(customer_id);
+
+Table altered.
+
+SQL> select constraint_name  from user_cons_columns where table_name ='ACCOUNT_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+AD_CID_FK
+AD_ACCNO_PK
+AD_ASC_FK
+AD_ATC_FK
+
+SQL> select constraint_name  from user_cons_columns where table_name ='CUSTOMER';
+
+CONSTRAINT_NAME
+------------------------------
+CUSTOMERID_PK
+C_FNAME_NN
+C_EMAIL_NN
+C_PHONE_NN
+C_DOB_NN
+C_EMAIL_CHK
+C_PHONE_CHK
+C_AID_FK
+C_IFSC_FK
+
+9 rows selected.
+
+SQL> COMMIT;
+
+Commit complete.
+SQL> create sequence c_cid_seq
+  2  start with 101
+  3  minvalue 100
+  4  increment by 1
+  5  maxvalue 1000000000;
+
+Sequence created.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Data insertion @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+SQL> select constraint_name  from user_cons_columns where table_name ='CUSTOMER';
+
+CONSTRAINT_NAME
+------------------------------
+CUSTOMERID_PK
+C_FNAME_NN
+C_EMAIL_NN
+C_PHONE_NN
+C_DOB_NN
+C_PHONE_CHK
+C_EMAIL_CHK
+C_IFSC_FK
+
+8 rows selected.
+
+SQL> insert into customer values (concat('GBCC',c_cid_seq.nextval),'&ifsc_code','&Fname','&mname','&Lname','&guardian_name','&email_id',&phone_no,'&dob','&gender','&nationality');
+Enter value for ifsc_code: GBIFSC001
+Enter value for fname: Customer FA
+Enter value for mname: Customer MA
+Enter value for lname: Customer LA
+Enter value for guardian_name: Guardian A
+Enter value for email_id: a@gmail.com
+Enter value for phone_no: 1111111111
+Enter value for dob: 01-jan-18
+Enter value for gender: male
+Enter value for nationality: indian
+old   1: insert into customer values (concat('GBCC',c_cid_seq.nextval),'&ifsc_code','&Fname','&mname','&Lname','&guardian_name','&email_id',&phone_no,'&dob','&gender','&nationality')
+new   1: insert into customer values (concat('GBCC',c_cid_seq.nextval),'GBIFSC001','Customer FA  ','Customer MA','Customer LA ','Guardian A ','a@gmail.com',1111111111,'01-jan-18','male','indian')
+
+1 row created.
+
+SQL> select * from customer;
+
+CUSTOMER_ID          IFSC_CODE            FNAME                MNAME                LNAME             GUARDIAN_NAME                     EMAIL_ID               PHONE_NO DOB       GENDE NATIONALITY
+-------------------- -------------------- -------------------- -------------------- -------------------- ------------------------------ -------------------- ---------- --------- ----- --------------------
+GBCC101              GBIFSC001            Customer FA          Customer MA          Customer LA       Guardian A                        a@gmail.com          1111111111 01-JAN-18 male  indian
+GBCC102              GBIFSC002            Customer FB          Customer MB          Customer LB       Guardian B                        b@gmail.com          1111111112 02-JAN-18 F     Indian
+GBCC103              GBIFSC003            Customer FC          Customer MC          Customer LC       Guardian C                        C@gmail.com          1111111113 03-JAN-18 M     indian
+GBCC104              GBIFSC003            Customer FD          Customer MD          Customer LD       Guardian D                        d@gmail.com           111111114 04-JAN-18 M     indian
+GBCC105              GBIFSC004            Customer FE          Customer ME          Customer LE       Guardian E                        e@gmail.com          1111111115 05-JAN-18 F     indian
+GBCC107              GBIFSC004            Customer FF          Customer MF          Customer LF       Guardian F                        f@gmail.com          1111111116 06-JAN-18 M     Indian
+GBCC108              GBIFSC005            Customer FG          Customer MG          Customer LG       Guardian G                        g@gmail.com          1111111117 07-JAN-18 M     Indian
+
+7 rows selected.
+
+SQL>
+SQL> insert into account_details values (accno_seq1.nextval,101,113,20000,'GBCC108');
+
+1 row created.
+
+SQL> select * from account_details;
+
+ACCOUNT_NO ACCOUNT_STATUS_CODE ACCOUNT_TYPE_CODE CURRENT_BALANCE CUSTOMER_ID
+---------- ------------------- ----------------- --------------- --------------------
+1000000000                 101               111           10000 GBCC101
+1000000001                 101               111            1000 GBCC102
+1000000002                 101               111           11000 GBCC103
+1000000003                 101               111           15000 GBCC104
+1000000004                 101               113           15000 GBCC105
+1000000006                 101               112           20000 GBCC107
+1000000007                 101               111           20000 GBCC108
+1000000008                 101               113           20000 GBCC108
+
+8 rows selected.
+
+SQL> select * from nominee_details;
+
+FNAME                LNAME                RELATION               PHONE_NO DOB       CUSTOMER_ID
+-------------------- -------------------- -------------------- ---------- --------- --------------------
+Nominee FA           Nominee LA           son                  2222222222 01-FEB-18 GBCC101
+Nominee FB           Nominee LB           daughter             2222222223 02-FEB-18 GBCC102
+Nominee FC           Nominee LC           father               2222222224 03-FEB-18 GBCC103
+Nominee FD           Nominee LD           father               2222222225 04-FEB-18 GBCC104
+Nominee FE           Nominee LE           mother               2222222226 05-FEB-18 GBCC105
+Nominee FF           Nominee LF           wife                 2222222227 06-FEB-18 GBCC107
+Nominee FH           Nominee LH           son                  2222222228 07-FEB-18 GBCC108
+
+7 rows selected.
+
+
+SQL> select * from nominee_details;
+
+FNAME                LNAME                RELATION               PHONE_NO DOB       CUSTOMER_ID
+-------------------- -------------------- -------------------- ---------- --------- --------------------
+Nominee FA           Nominee LA           son                  2222222222 01-FEB-18 GBCC101
+Nominee FB           Nominee LB           daughter             2222222223 02-FEB-18 GBCC102
+Nominee FC           Nominee LC           father               2222222224 03-FEB-18 GBCC103
+Nominee FD           Nominee LD           father               2222222225 04-FEB-18 GBCC104
+Nominee FE           Nominee LE           mother               2222222226 05-FEB-18 GBCC105
+Nominee FF           Nominee LF           wife                 2222222227 06-FEB-18 GBCC107
+Nominee FH           Nominee LH           son                  2222222228 07-FEB-18 GBCC108
+
+7 rows selected.
+
+SQL> select * from customer_address_details;
+
+CUSTOMER_ID          STREET               AREA                 CITY                    PINCODE STATE        COUNTRY
+-------------------- -------------------- -------------------- -------------------- ---------- -------------------- --------------------
+GBCC101              street CA            Area CA              city CA                  111111 state CA             country CA
+GBCC102              street CB            Area CB              city CB                  111111 state CB             country CB
+GBCC103              street CC            Area CC              city CC                  222222 state CC             country CC
+GBCC104              street CD            Area CD              city CD                  333333 state CD             country CD
+GBCC105              street CE            Area CE              city CE                  444444 state CE             country CE
+GBCC107              street CF            Area CF              city CF                  555555 state CF             country CF
+GBCC108              street CG            Area CG              city CG                  666666 state CG             country CG
+
+7 rows selected.
+
+
+==============================employee=========================================================================================================
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp A',1000000000,'GBIFSC001',10000,500,'ea@gmail.com',333333333,'M','03-mar-18','14-aug-18','CEO');
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp B',1000000001,'GBIFSC001',1000,400,'ea@gmail.com',333333333,'F','05-mar-18','14-aug-18','manager');
+
+1 row created.
+
+SQL> select * from employee;
+
+EMPLOYEE_ID          ENAME                ACCOUNT_NO IFSC_CODE                SALARY COMMISSION EMAIL_ID                         PHONE_NO GENDE DOB       HIREDATE  JOB
+-------------------- -------------------- ---------- -------------------- ---------- ---------- ------------------------------ ---------- ----- --------- --------- --------------------
+GBEE100              Emp A                1000000000 GBIFSC001                 10000        500 ea@gmail.com                    333333333 M     03-MAR-18 14-AUG-18 CEO
+GBEE101              Emp B                1000000001 GBIFSC001                  1000        400 ea@gmail.com                    333333333 F     05-MAR-18 14-AUG-18 manager
+
+SQL> commit;
+
+Commit complete.
+
+
+day 4 =============================================================================================
+
+
+SQL> alter table employee Add Sal_Account_No Number(10);
+
+Table altered.
+
+SQL> alter table employee Add Sal_IFSC_Code varchar(20);
+
+Table altered.
+
+
+
+
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp B','GBIFSC003',20000,500,'eb@gmail.com',555556,'F','07-mar-18','02-jan-18','CEO',2000000001,'SBIIFSC101','SBI','GBCC104');
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp C','GBIFSC004',20000,500,'ec@gmail.com',555557,'M','08-mar-18','03-jan-18','desk manager',2000000003,'ICICIIFSC102','ICICI',NULL);
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp D','GBIFSC001',200000,300,'ed@gmail.com',555558,'M','09-mar-18','04-jan-18','Accountant',2000000004,'ICICIIFSC103','ICICI',NULL);
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp E','GBIFSC002',2000000,400,'ee@gmail.com',555559,'F','10-mar-18','05-jan-18','Cashier',2000000005,'AXISIFSC103','AXIS',NULL);
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp F','GBIFSC002',20000000,4000,'ef@gmail.com',555560,'F','11-mar-18','06-jan-18','manager',2000000006,'AXISIFSC103','AXIS',NULL);
+
+1 row created.
+
+SQL> insert into employee values(concat('GBEE',emp_eid_seq.nextval),'Emp G','GBIFSC005',200000000,4000,'eg@gmail.com',555561,'M','12-mar-18','07-jan-18','manager',2000000006,'CENTRALIFSC103','CBI',NULL);
+
+1 row created.
+
+
+SQL> insert into transaction Values(txn_tid_seq.nextval,1000000003,2023456789,121,systimestamp,000.00);
+
+1 row created.
+
+SQL> insert into transaction Values(txn_tid_seq.nextval,1000000004,2023456789,122,systimestamp,000.00);
+
+1 row created.
+
+SQL> insert into transaction Values(txn_tid_seq.nextval,1000000005,3023456789,123,systimestamp,000.00);
+insert into transaction Values(txn_tid_seq.nextval,1000000005,3023456789,123,systimestamp,000.00)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (GLOBAL_BANK.T_ACCNO_FK) violated - parent key not found
+
+
+SQL> insert into transaction Values(txn_tid_seq.nextval,1000000006,3023456789,123,systimestamp,000.00);
+
+1 row created.
+
+SQL> insert into transaction Values(txn_tid_seq.nextval,1000000006,4023456789,121,systimestamp,000.00);
+
+1 row created.
+
+SQL> select * from transaction;
+
+TRANSACTION_ID ACCOUNT_NO MERCHANT_ID TRANSACTION_TYPE_CODE TRANSACTION_DATE_TIME                                               TRANSACTION_AMOUNT
+-------------- ---------- ----------- --------------------- --------------------------------------------------------------------------- ------------------
+    1000000000 1000000002  1023456789                   123 15-AUG-18 01.14.01.904000 PM                                                         0
+    1000000001 1000000003  2023456789                   121 15-AUG-18 01.17.04.135000 PM                                                         0
+    1000000002 1000000004  2023456789                   122 15-AUG-18 01.17.20.074000 PM                                                         0
+    1000000004 1000000006  3023456789                   123 15-AUG-18 01.17.53.315000 PM                                                         0
+    1000000005 1000000006  4023456789                   121 15-AUG-18 01.18.10.673000 PM                                                         0
+
+SQL> update customer
+  2  set customer_date=sysdate
+  3  ;
+
+7 rows updated.
+
+SQL> select * from employee;
+
+EMPLOYEE_ID          ENAME                IFSC_CODE                SALARY COMMISSION EMAIL_ID                 PHONE_NO GENDE DOB       HIREDATE  JOB                  SAL_ACCOUNT_NO SAL_IFSC_CODE        SAL_BANK             CUSTOMER_ID
+-------------------- -------------------- -------------------- ---------- ---------- ------------------------------ ---------- ----- --------- --------- -------------------- -------------- -------------------- -------------------- --------------------
+GBEE100              Emp A                GBIFSC003                 10000        500 ea@gmail.com               555555 M     06-MAR-18 01-JAN-18 manager
+  2000000000 SBIIFSC100           SBI                  GBCC103
+GBEE101              Emp B                GBIFSC003                 20000        500 eb@gmail.com               555556 F     07-MAR-18 02-JAN-18 CEO
+  2000000001 SBIIFSC101           SBI                  GBCC104
+GBEE102              Emp C                GBIFSC004                 20000        500 ec@gmail.com               555557 M     08-MAR-18 03-JAN-18 desk manager
+  2000000003 ICICIIFSC102         ICICI
+GBEE103              Emp D                GBIFSC001                200000        300 ed@gmail.com               555558 M     09-MAR-18 04-JAN-18 Accountant
+  2000000004 ICICIIFSC103         ICICI
+GBEE104              Emp E                GBIFSC002               2000000        400 ee@gmail.com               555559 F     10-MAR-18 05-JAN-18 Cashier
+  2000000005 AXISIFSC103          AXIS
+GBEE105              Emp F                GBIFSC002              20000000       4000 ef@gmail.com               555560 F     11-MAR-18 06-JAN-18 manager
+  2000000006 AXISIFSC103          AXIS
+GBEE106              Emp G                GBIFSC005             200000000       4000 eg@gmail.com               555561 M     12-MAR-18 07-JAN-18 manager
+  2000000006 CENTRALIFSC103       CBI
+
+7 rows selected.
+
+SQL> alter table employee Add Sal_Bank varchar(20);
+
+Table altered.
+
+
+SQL> alter table nominee_details drop constraint nd_cid_fk;
+
+Table altered.
+
+SQL> alter table nominee_details add constraints ND_CID_FK foreign key(customer_id) references customer(customer_id);
+
+Table altered.
+
+SQL> alter table nominee_details drop constraint nd_cid_fk;
+
+Table altered.
+
+SQL> alter table nominee_details add constraints ND_CID_FK foreign key(customer_id) references customer(customer_id) on delete cascade;
+
+Table altered.
+
+SQL> delete from customer where fname='rajeev';
+delete from customer where fname='rajeev'
+*
+ERROR at line 1:
+ORA-02292: integrity constraint (GLOBAL_BANK.AD_CID_FK) violated - child record found
+
+
+SQL> alter table account_details drop constraint  AD_CID_FK;
+
+Table altered.
+
+SQL> alter table account_details add constraints AD_CID_FK foreign key(customer_id) references customer(customer_id) on delete cascade;
+
+Table altered.
+
+SQL> select constraint_name from user_cons_columns where table_name='account_DETAILS';
+
+no rows selected
+
+SQL> select constraint_name from user_cons_columns where table_name='ACCOUNT_DETAILS';
+
+CONSTRAINT_NAME
+------------------------------
+AD_CID_FK
+AD_ACCNO_PK
+AD_ASC_FK
+AD_ATC_FK
+
+SQL> delete from customer where fname='rajeev';
+
+3 rows deleted.
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+ACCOUNT_DETAILS                TABLE
+ACCOUNT_STATUS                 TABLE
+ACCOUNT_TYPE                   TABLE
+BANKS                          TABLE
+BRANCH_ADDRESS_DETAILS         TABLE
+BRANCH_DETAILS                 TABLE
+BRANCH_TYPES                   TABLE
+CUSTOMER                       TABLE
+CUSTOMER_ADDRESS_DETAILS       TABLE
+EMPLOYEE                       TABLE
+NOMINEE_DETAILS                TABLE
+TRANSACTION                    TABLE
+TRANSACTION_TYPES              TABLE
+
+13 rows selected.
+
+SQL> alter table customer_address_details drop constraint cad_cid_fk;
+
+Table altered.
+
+
+
+SQL> alter table customer_address_details add constraints CAD_CID_FK foreign key(customer_id) references customer(customer_id) on delete cascade;
+
+Table altered.
+
+SQL> alter table employee drop constraint emp_cid_fk;
+
+Table altered.
+
+SQL> alter table employee add constraints EMP_CID_FK foreign key(customer_id) references customer(customer_id) on delete cascade;
+
+Table altered.
+
+SQL> commit;
+
+Commit complete.
+
+
+SQL> select * from account_reports;
+
+ACCOUNT_NO CURRENT_BALANCE ACCOUNT_TYPE_DESC    ACCOUNT_STATUS_DESC
+---------- --------------- -------------------- --------------------
+1000000000           10000 Savings              Active
+1000000001            1000 Savings              Active
+1000000002           11000 Savings              Active
+1000000003           15000 Savings              Active
+1000000004           15000 Joint                Active
+1000000006           20000 Current              Active
+1000000007           20000 Savings              Active
+1000000008           20000 Joint                Active
+1000000021               0 Savings              Active
+1000000022               0 Savings              Active
+
+
+SQL> select account_type_desc , sum(current_balance) from account_reports
+  2  group by rollup (account_type_desc);
+
+ACCOUNT_TYPE_DESC    SUM(CURRENT_BALANCE)
+-------------------- --------------------
+Current                             20000
+Joint                               35000
+Savings                             57000
+                                   112000
+
+
+SQL> create view customer_reports as select c.customer_id,c.fname,c.lname ,c.email_id,c.IFSC_code,c.customer_date,ad.street,ad.area,ad.city,ad.pincode,a.Account_no,a.account_type_code,a.current_balance,n.fname as f_name,n.lname as  l_name,n.relation from customer c,customer_address_details ad,account_details a,nominee_details n  where c.customer_Id=ad.customer_id and (c.customer_ID=a.customer_Id and c.customer_Id=n.customer_Id);
+SQL> select * from customer_reports;
+
+CUSTOMER_ID          FNAME                LNAME                EMAIL_ID             IFSC_CODE         CUSTOMER_ STREET          AREA                 CITY
+     PINCODE ACCOUNT_NO ACCOUNT_TYPE_CODE CURRENT_BALANCE
+-------------------- -------------------- -------------------- -------------------- -------------------- --------- -------------------- -------------------- -------------------- ---------- ---------- ----------------- ---------------
+F_NAME               L_NAME               RELATION
+-------------------- -------------------- --------------------
+GBCC101              Customer FA          Customer LA          a@gmail.com          GBIFSC001         15-AUG-18 street CA               Area CA              city CA
+              111111 1000000000               111           10000
+Nominee FA           Nominee LA           son
+
+GBCC102              Customer FB          Customer LB          b@gmail.com          GBIFSC002         15-AUG-18 street CB               Area CB              city CB
+              111111 1000000001               111            1000
+Nominee FB           Nominee LB           daughter
+
+GBCC103              Customer FC          Customer LC          C@gmail.com          GBIFSC003         15-AUG-18 street CC               Area CC              city CC
+              222222 1000000002               111           11000
+Nominee FC           Nominee LC           father
+
+GBCC104              Customer FD          Customer LD          d@gmail.com          GBIFSC003         15-AUG-18 street CD               Area CD              city CD
+              333333 1000000003               111           15000
+Nominee FD           Nominee LD           father
+
+GBCC105              Customer FE          Customer LE          e@gmail.com          GBIFSC004         15-AUG-18 street CE               Area CE              city CE
+              444444 1000000004               113           15000
+Nominee FE           Nominee LE           mother
+
+GBCC107              Customer FF          Customer LF          f@gmail.com          GBIFSC004         15-AUG-18 street CF               Area CF              city CF
+              555555 1000000006               112           20000
+Nominee FF           Nominee LF           wife
+
+GBCC108              Customer FG          Customer LG          g@gmail.com          GBIFSC005         15-AUG-18 street CG               Area CG              city CG
+              666666 1000000007               111           20000
+Nominee FH           Nominee LH           son
+
+GBCC108              Customer FG          Customer LG          g@gmail.com          GBIFSC005         15-AUG-18 street CG               Area CG              city CG
+              666666 1000000008               113           20000
+Nominee FH           Nominee LH           son
+
+
+
+SQL> select * from account_type a,account_details b where a.account_type_code=b.account_type_code;
+
+ACCOUNT_TYPE_CODE ACCOUNT_TYPE_DESC    ACCOUNT_NO ACCOUNT_STATUS_CODE ACCOUNT_TYPE_CODE CURRENT_BALANCE CUSTOMER_ID
+----------------- -------------------- ---------- ------------------- ----------------- --------------- --------------------
+              111 Savings              1000000000                 101               111           10000 GBCC101
+              111 Savings              1000000001                 101               111            1000 GBCC102
+              111 Savings              1000000002                 101               111           11000 GBCC103
+              111 Savings              1000000003                 101               111           15000 GBCC104
+              113 Joint                1000000004                 101               113           15000 GBCC105
+              112 Current              1000000006                 101               112           20000 GBCC107
+              111 Savings              1000000007                 101               111           20000 GBCC108
+              113 Joint                1000000008                 101               113           20000 GBCC108
+              111 Savings              1000000021                 101               111               0 GBCC124
+              111 Savings              1000000022                 101               111               0 GBCC126
+
+10 rows selected.
+
+SQL> select * from account_type;
+
+ACCOUNT_TYPE_CODE ACCOUNT_TYPE_DESC
+----------------- --------------------
+              111 Savings
+              112 Current
+              113 Joint
+
+SQL> select * from account_type a,account_details b,account_status c where a.account_type_code=b.account_type_code and  b.account_status_code=c.account_status_code;
+
+ACCOUNT_TYPE_CODE ACCOUNT_TYPE_DESC    ACCOUNT_NO ACCOUNT_STATUS_CODE ACCOUNT_TYPE_CODE CURRENT_BALANCE CUSTOMER_ID          ACCOUNT_STATUS_CODE ACCOUNT_STATUS_DESC
+----------------- -------------------- ---------- ------------------- ----------------- --------------- -------------------- ------------------- --------------------
+              111 Savings              1000000000                 101               111           10000 GBCC101                              101 Active
+              111 Savings              1000000001                 101               111            1000 GBCC102                              101 Active
+              111 Savings              1000000002                 101               111           11000 GBCC103                              101 Active
+              111 Savings              1000000003                 101               111           15000 GBCC104                              101 Active
+              113 Joint                1000000004                 101               113           15000 GBCC105                              101 Active
+              112 Current              1000000006                 101               112           20000 GBCC107                              101 Active
+              111 Savings              1000000007                 101               111           20000 GBCC108                              101 Active
+              113 Joint                1000000008                 101               113           20000 GBCC108                              101 Active
+              111 Savings              1000000021                 101               111               0 GBCC124                              101 Active
+              111 Savings              1000000022                 101               111               0 GBCC126                              101 Active
+
+10 rows selected.
+
+SQL> create view Account_Reports  as select * from account_type a,account_details b,account_status c where a.account_type_code=b.account_type_code and  b.account_status_code=c.account_status_code;
+create view Account_Reports  as select * from account_type a,account_details b,account_status c where a.account_type_code=b.account_type_code and  b.account_status_code=c.account_status_code
+                                       *
+ERROR at line 1:
+ORA-00957: duplicate column name
+
+
+SQL> create view Account_Reports  as select account_no,current_balance,a.account_type_desc,c.account_status_desc from account_type a,account_details b,account_status c where a.account_type_code=b.account_type_code and  b.account_status_code=c.account_status_code;
+
+View created.
+
+SQL> select * from account_reports;
+
+ACCOUNT_NO CURRENT_BALANCE ACCOUNT_TYPE_DESC    ACCOUNT_STATUS_DESC
+---------- --------------- -------------------- --------------------
+1000000000           10000 Savings              Active
+1000000001            1000 Savings              Active
+1000000002           11000 Savings              Active
+1000000003           15000 Savings              Active
+1000000004           15000 Joint                Active
+1000000006           20000 Current              Active
+1000000007           20000 Savings              Active
+1000000008           20000 Joint                Active
+1000000021               0 Savings              Active
+1000000022               0 Savings              Active
+
+10 rows selected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

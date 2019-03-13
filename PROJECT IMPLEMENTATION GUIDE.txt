@@ -1,0 +1,25 @@
+	Banking project:
+------------------------------
+	User : Anand
+
+		TOTAL OF 10 TABLES
+
+	TOTAL OF 10 SYNONYMS. ONE FOR EACH TABLE.
+---------------------------------------- 
+
+
+	views : for data inserts to multiple base tables.   for query store.   for data security
+
+	procedures: for data validations. dynamic sql. data formatting & reporting
+
+	functions: for computations and data generation
+(Select command)
+	triggers : for data distribution to multiple base tables
+
+
+mail to : chinnaduraisrivai@gmail.com
+
+
+Kindly let me know if any doubts
+
+chinnaduraisrivai@gmail.com
